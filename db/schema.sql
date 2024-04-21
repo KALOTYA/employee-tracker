@@ -20,4 +20,14 @@ create table roles (
     on delete set null
 );
 
-create table employees ();
+create table employees (
+    id int not null auto_increment,
+    first_name varchar(30),
+    last_name varchar(30),
+    role_id int not null,
+    manager_id int,
+    primary key(id)
+    foreign key (role_id)
+    references roles(id)
+    on delete set null 
+);
