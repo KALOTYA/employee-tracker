@@ -237,7 +237,10 @@ function updateEmployeeRole() {
     });
 };
 
-function exit() {};
+function exit() {
+    console.log('Goodbye!')
+    connection.end();
+};
 
 function mainMenu() {
     inquirer.prompt([
@@ -264,8 +267,7 @@ function mainMenu() {
                 break;
             case 'Update Employee Role': updateEmployeeRole();
                 break;
-            case 'Exit': console.log('Goodbye!');
-                connection.end();
+            case 'Exit': exit();
                 break;
             default: console.log('Invalid Choice!');
                 mainMenu();
