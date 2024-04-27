@@ -29,7 +29,36 @@ function viewAllEmployees() {
     });
 };
 
-function addDepartment() {};
+function addDepartment() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'departmentName',
+            message: 'Enter the name of the Department:',
+            validate: function (input) {
+                if (!input) {
+                    return 'Department name cannot be empty.';
+                }
+                return true;
+            }
+        }
+    ])
+    .then((answers) => {
+        const departmentName = answers.departmentName;
+        connection.query(
+            'INSERT INTO departments (name) VALUES (?)',
+            [departmentName],
+            function (err, results) {
+                if (err) {
+                    console.error('Error adding department:', err);
+                } else {
+                    console.log(`Department ${departmentName} added successfully!`);
+                }
+                mainMenu();
+            }
+        )
+    })
+};
 
 function addRole() {};
 
