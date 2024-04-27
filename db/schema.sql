@@ -3,6 +3,8 @@ drop database if exists company_db;
 
 create database company_db;
 
+use company_db;
+
 create table departments (
     id int not null,
     name varchar(30)
