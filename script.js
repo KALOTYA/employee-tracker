@@ -28,3 +28,13 @@ function viewAllEmployees() {
         console.log(results);
     });
 };
+
+function addDepartment() {};
+
+function addRole() {};
+
+function addEmployee() {};
+
+function updateEmployeeRole() {};
+
+function exit() {};
