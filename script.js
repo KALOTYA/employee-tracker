@@ -10,3 +10,10 @@ const connection = mysql2.createConnection(
         database: 'DB_NAME',
     }
 );
+
+function viewAllDepartments() {
+    connection.query('SELECT FROM departments', function (err, results) {
+        console.log(results);
+    });
+};
+
