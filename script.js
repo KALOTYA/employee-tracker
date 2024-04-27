@@ -118,7 +118,65 @@ function addRole() {
     })
 };
 
-function addEmployee() {};
+function addEmployee() {
+    connection.query('SELECT * FROM roles', function (err, roles) {
+        if (err) {
+            console.error('Error fetching roles:', err);
+            return;
+        }
+
+        inquirer.prompt([
+            {
+                type: 'input',
+                name: 'firstName',
+                message: 'Enter Employee first name:',
+                validate: function (input) {
+                    return input ? true : 'Employees first name cannot be empty'
+                }
+            },
+            {
+                type: 'input',
+                name: 'lastName',
+                message: 'Enter Employee last name:',
+                validate: function (input) {
+                    return input ? true : 'Employees last name cannot be empty'
+                }
+            },
+            {
+                type: 'list',
+                name: 'roleId',
+                message: 'Select the Employee role:',
+                choices: roles.map(role => ({
+                    name: role.title,
+                    value: role.id
+                }))
+            },
+            {
+                type: 'input',
+                name: 'managerId',
+                message: 'Enter the managers ID (if applicable):',
+                validate: function (input) {
+                    return (input === '' || !isNaN(input)) ? true : 'Please enter a valid id'
+                }
+            }
+        ])
+        .then((answers) => {
+            const { firstName, lastName, roleId, managerId } = answers;
+            connection.query(
+                'INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)',
+                [firstName, lastName, roleId, managerId || null],
+                function (err, results) {
+                    if (err) {
+                        console.error('Error adding employee:', err);
+                    } else {
+                        console.log(`Employee ${firstName} ${lastName} added successfully!`);
+                    }
+                    mainMenu();
+                } 
+            );
+        });
+    });
+};
 
 function updateEmployeeRole() {};
 
