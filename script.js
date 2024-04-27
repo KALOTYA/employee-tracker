@@ -272,5 +272,5 @@ function mainMenu() {
             default: console.log('Invalid Choice!');
                 mainMenu();
         }
-    })
+    });
 };
