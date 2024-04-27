@@ -60,7 +60,63 @@ function addDepartment() {
     })
 };
 
-function addRole() {};
+function addRole() {
+    connection.query('SELECT * FROM departments', function (err, departments) {
+        if (err) {
+            console.error('Error fetching departments:', err);
+            return;
+        }
+
+        inquirer.prompt([
+            {
+                type: 'input',
+                name: 'roleTitle',
+                message: 'Enter title of Role:',
+                validate: function (input) {
+                    if (!input) {
+                        return 'Role title cannot be empty';
+                    }
+                    return true;
+                }
+            },
+            {
+                type: 'input',
+                name: 'roleSalary',
+                message: 'Enter the Salary fro the role:',
+                validate: function (input) {
+                    if (!input || isNaN(input)) {
+                        return 'Please Enter a valid Salary';
+                    }
+                    return true;
+                }
+            },
+            {
+                type: 'list',
+                name: 'departmentId',
+                message: 'Select the department for the role:',
+                choices: departments.map(department => ({
+                    name: department.name,
+                    value: department.id
+                }))
+            }
+        ])
+        .then((answers) => {
+            const { roleTitle, roleSalary, departmentId } = answers;
+            connection.query(
+                'INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)',
+                [roleTitle, roleSalary, departmentId],
+                function (err, results) {
+                    if (err) {
+                        console.error('Error adding role:', err);
+                    } else {
+                        console.log(`Role ${roleTitle} added successfully!`);
+                    }
+                    mainMenu();
+                }
+            )
+        })
+    })
+};
 
 function addEmployee() {};
 
