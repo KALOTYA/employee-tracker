@@ -12,7 +12,13 @@ const connection = mysql2.createConnection(
 );
 
 function viewAllDepartments() {
-    connection.query('SELECT FROM departments', function (err, results) {
+    connection.query('SELECT * FROM departments', function (err, results) {
+        console.log(results);
+    });
+};
+
+function viewAllRoles() {
+    connection.query('SELECT * FROM roles', function (err, results) {
         console.log(results);
     });
 };
