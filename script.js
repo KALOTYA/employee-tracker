@@ -23,3 +23,8 @@ function viewAllRoles() {
     });
 };
 
+function viewAllEmployees() {
+    connection.query('SELECT * FROM employees', function (err, results) {
+        console.log(results);
+    });
+};
