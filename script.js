@@ -178,7 +178,64 @@ function addEmployee() {
     });
 };
 
-function updateEmployeeRole() {};
+function updateEmployeeRole() {
+    connection.query('SELECT * FROM employees', function (err, employees) {
+        if (err) {
+            console.error('Error fetching employees:', err);
+            return;
+        }
+
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'employeeId',
+                message: 'Select the employee to update:',
+                choices: employees.map(employee => ({
+                    name: `${employee.first_name} ${employee.last_name}`,
+                    value: employee.id
+                }))
+            }
+        ])
+        .then((employeeAnswer) => {
+            const employeeId = employeeAnswer.employeeId;
+
+            connection.query('SELECT * FROM roles', function (err, roles) {
+                if (err) {
+                    console.error('Error fetching roles:', err);
+                    return;
+                }
+
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'roleId',
+                        message: 'Select new role for employee:',
+                        choices: roles.map(role => ({
+                            name: role.title,
+                            value: role.id
+                        }))
+                    }
+                ])
+                .then((roleAnswer) => {
+                    const roleId = roleAnswer.roleId;
+
+                    connection.query(
+                        'UPDATE employees SET role_id = ? WHERE id = ?',
+                        [roleId, employeeId],
+                        function (err, result) {
+                            if (err) {
+                                console.error('Error updating employee role:', err);
+                            } else {
+                                console.log('Employee role updated successfully!');
+                            }
+                            mainMenu();
+                        }
+                    );
+                });
+            });
+        });
+    });
+};
 
 function exit() {};
 
