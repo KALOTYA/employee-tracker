@@ -6,20 +6,18 @@ create database company_db;
 use company_db;
 
 create table departments (
-    id int not null,
-    name varchar(30)
+    id int not null auto_increment,
+    name varchar(30),
     primary key(id)
 );
 
 create table roles (
-    id int not null,
+    id int not null auto_increment,
     title varchar(30),
     salary decimal,
-    depatment_id int not null,
+    department_id int,
     primary key(id),
-    foreign key (department_id)
-    references departments(id)
-    on delete set null
+    foreign key (department_id) references departments(id) 
 );
 
 create table employees (
@@ -28,8 +26,6 @@ create table employees (
     last_name varchar(30),
     role_id int not null,
     manager_id int,
-    primary key(id)
-    foreign key (role_id)
-    references roles(id)
-    on delete set null 
+    primary key(id),
+    foreign key (role_id) references roles(id)  
 );

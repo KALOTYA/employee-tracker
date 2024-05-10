@@ -1,31 +1,35 @@
+require('dotenv').config();
 const inquirer = require("inquirer");
 const mysql2 = require("mysql2");
-require(dotenv).config();
+
 
 const connection = mysql2.createConnection(
     {
         host: 'localhost',
-        user: 'DB_USER',
-        password: 'DB_PASSWORD',
-        database: 'DB_NAME',
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
     }
 );
 
 function viewAllDepartments() {
     connection.query('SELECT * FROM departments', function (err, results) {
         console.log(results);
+        init();
     });
 };
 
 function viewAllRoles() {
     connection.query('SELECT * FROM roles', function (err, results) {
         console.log(results);
+        init();
     });
 };
 
 function viewAllEmployees() {
     connection.query('SELECT * FROM employees', function (err, results) {
         console.log(results);
+        init();
     });
 };
 
@@ -54,7 +58,7 @@ function addDepartment() {
                 } else {
                     console.log(`Department ${departmentName} added successfully!`);
                 }
-                mainMenu();
+                init();
             }
         )
     })
@@ -111,7 +115,7 @@ function addRole() {
                     } else {
                         console.log(`Role ${roleTitle} added successfully!`);
                     }
-                    mainMenu();
+                    init();
                 }
             )
         })
@@ -171,7 +175,7 @@ function addEmployee() {
                     } else {
                         console.log(`Employee ${firstName} ${lastName} added successfully!`);
                     }
-                    mainMenu();
+                    init();
                 } 
             );
         });
@@ -228,7 +232,7 @@ function updateEmployeeRole() {
                             } else {
                                 console.log('Employee role updated successfully!');
                             }
-                            mainMenu();
+                            init();
                         }
                     );
                 });
@@ -252,6 +256,7 @@ function mainMenu() {
         },
     ])
     .then((answers) => {
+        console.log("Answers:", answers);
         switch (answers.mainMenu) {
             case 'View All Departments': viewAllDepartments();
                 break;
@@ -270,8 +275,13 @@ function mainMenu() {
             case 'Exit': exit();
                 break;
             default: console.log('Invalid Choice!');
-                mainMenu();
+                init();
         }
     });
 };
-mainMenu();
+
+function init() {
+    mainMenu();
+};
+
+init();
